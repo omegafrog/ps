@@ -1,0 +1,5 @@
+.vscode
+bin/
+obj/
+*.exe
+jh05013_Edition_pt.1
