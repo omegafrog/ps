@@ -1,6 +1,8 @@
 import sys
 from collections import deque
 
+sys.setrecursionlimit(100000)
+
 
 class node:
     def __init__(self, parent, num):
