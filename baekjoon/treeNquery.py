@@ -1,34 +1,67 @@
 import sys
-
-N, R, Q = list(map(int, sys.stdin.readline().rstrip().split()))
-edges = []
-mem = [-1] * (N + 1)
+from collections import deque
 
 
-def countNode(root, mem, visited):
-    count = 0
-    if mem[root] != -1:
-        return mem[root]
-    for v in edges[root]:
-        if visited[v] == 0:
-            visited[v] = 1
-            count += countNode(v, mem, visited)
-    mem[root] = count
-    return mem[root] + 1
+class node:
+    def __init__(self, parent, num):
+        self.parent = parent
+        self.children = []
+        self.num = num
+
+    def appendChild(self, num):
+        child = node(self, num)
+        self.children.append(child)
+        return child
 
 
-for i in range(N + 1):
-    edges.append([])
+N, R, Q = list(map(int, input().rstrip().split()))
 
+subTrees = [-1] * (N + 1)
+edges = [list() for _ in range(N + 1)]
+
+head = node(None, R)
 for _ in range(N - 1):
     u, v = list(map(int, sys.stdin.readline().rstrip().split()))
     edges[u].append(v)
     edges[v].append(u)
 
-print(edges)
+# print(edges)
+
+q = deque()
+q.append(head)
+while len(q) > 0:
+    cur = q.popleft()
+    num = cur.num
+    for next in edges[num]:
+        if cur.parent is None or cur.parent.num != next:
+            child = cur.appendChild(next)
+            q.append(child)
+
+
+# print(head.num)
+# print([x.num for x in head.children])
+
+
+def getSubTreeCnt(head, subTrees):
+    if len(head.children) == 0:
+        subTrees[head.num] = 1
+        return 1
+
+    res = subTrees[head.num]
+    if res != -1:
+        return res
+    res = 0
+    for child in head.children:
+        res += getSubTreeCnt(child, subTrees)
+    res += 1
+    subTrees[head.num] = res
+    return res
+
+
+getSubTreeCnt(head, subTrees)
+
+# print(subTrees)
+
 for _ in range(Q):
-    root = int(input())
-    visited = [0] * (N + 1)
-    visited[root] = 1
-    res = countNode(root, mem, visited)
-    print(res - 1)
+    U = int(sys.stdin.readline().rstrip().split()[0])
+    print(subTrees[U])
