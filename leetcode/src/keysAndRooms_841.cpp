@@ -3,9 +3,10 @@
 #include <stack>
 using namespace std;
 
-class Solution {
+class Solution
+{
 public:
-bool canVisitAllRooms(vector<vector<int>> &rooms)
+    bool canVisitAllRooms(vector<vector<int>> &rooms)
     {
         return dfs(rooms);
     }
@@ -48,3 +49,9 @@ bool canVisitAllRooms(vector<vector<int>> &rooms)
         return allVisited;
     }
 };
+
+int main(int argc, char const *argv[])
+{
+    
+    return 0;
+}
